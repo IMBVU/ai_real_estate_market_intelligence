@@ -1,12 +1,16 @@
 import streamlit as st
 import pandas as pd
+from pathlib import Path
 
 st.set_page_config(page_title="AI Real Estate Market Intelligence", layout="wide")
 
 st.title("AI Real Estate Market Intelligence Platform")
 st.caption("Built with real-world real estate listing data")
 
-scores = pd.read_csv("../outputs/real_estate_market_scores.csv")
+BASE_DIR = Path(__file__).resolve().parent
+DATA_PATH = BASE_DIR.parent / "outputs" / "real_estate_market_scores.csv"
+
+scores = pd.read_csv(DATA_PATH)
 scores = scores.fillna("")
 
 k1, k2, k3, k4 = st.columns(4)
