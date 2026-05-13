@@ -11,9 +11,6 @@ BASE_DIR = Path(__file__).resolve().parent
 DATA_PATH = BASE_DIR.parent / "outputs" / "real_estate_market_scores.csv"
 
 scores = pd.read_csv(DATA_PATH)
-scores = scores.fillna("")
-
-scores = pd.read_csv(DATA_PATH)
 
 numeric_cols = [
     "listings",
@@ -33,12 +30,14 @@ for col in numeric_cols:
     if col in scores.columns:
         scores[col] = pd.to_numeric(scores[col], errors="coerce")
 
-scores = scores.fillna("")
+scores["city"] = scores["city"].fillna("")
+scores["state"] = scores["state"].fillna("")
+
 k1, k2, k3, k4 = st.columns(4)
 k1.metric("Markets Scored", len(scores))
-k2.metric("Median Listing Price", f"${scores['median_price'].median():,.0f}")
-k3.metric("Median $/SqFt", f"${scores['median_price_per_sqft'].median():,.0f}")
-k4.metric("Top Score", f"{scores['market_opportunity_score'].max():.1f}")
+k2.metric("Median Listing Price", f"${scores['median_price'].median(skipna=True):,.0f}")
+k3.metric("Median $/SqFt", f"${scores['median_price_per_sqft'].median(skipna=True):,.0f}")
+k4.metric("Top Score", f"{scores['market_opportunity_score'].max(skipna=True):.1f}")
 
 st.subheader("Market Scorecard")
 st.dataframe(scores)
