@@ -13,6 +13,27 @@ DATA_PATH = BASE_DIR.parent / "outputs" / "real_estate_market_scores.csv"
 scores = pd.read_csv(DATA_PATH)
 scores = scores.fillna("")
 
+scores = pd.read_csv(DATA_PATH)
+
+numeric_cols = [
+    "listings",
+    "median_price",
+    "avg_price",
+    "median_bed",
+    "median_bath",
+    "median_house_size",
+    "median_price_per_sqft",
+    "affordability_score",
+    "liquidity_score",
+    "value_score",
+    "market_opportunity_score"
+]
+
+for col in numeric_cols:
+    if col in scores.columns:
+        scores[col] = pd.to_numeric(scores[col], errors="coerce")
+
+scores = scores.fillna("")
 k1, k2, k3, k4 = st.columns(4)
 k1.metric("Markets Scored", len(scores))
 k2.metric("Median Listing Price", f"${scores['median_price'].median():,.0f}")
